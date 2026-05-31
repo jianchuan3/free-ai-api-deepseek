@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>博客 - Free AI API DeepSeek 免费接口 | 技术文章</title>
+<meta name="description" content="Free AI API 博客 - DeepSeek 免费接口使用教程、AI 开发技巧、API 集成指南。免费使用 DeepSeek V4 大模型。">
+<meta name="keywords" content="DeepSeek教程, 免费AI API, DeepSeek V4, AI接口, 大模型开发">
+<meta property="og:title" content="Free AI API 博客 - DeepSeek 免费接口教程">
+<meta property="og:description" content="DeepSeek 免费 API 使用指南、AI 开发技巧、API 集成教程">
+<link rel="canonical" href="https://jianchuan3.github.io/free-ai-api-deepseek/blog.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#333;background:#f8f9fa}
+header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:40px 20px;text-align:center}
+h1{font-size:2.2em;margin-bottom:8px}
+.subtitle{font-size:1.1em;opacity:0.9}
+nav{background:#fff;border-bottom:1px solid #e0e0e0;padding:12px 0;text-align:center;position:sticky;top:0;z-index:100}
+nav a{color:#1a73e8;text-decoration:none;margin:0 15px;font-size:15px;font-weight:500}
+nav a:hover{text-decoration:underline}
+.container{max-width:900px;margin:0 auto;padding:30px 20px}
+
+/* 文章卡片 */
+.blog-card{background:#fff;border-radius:12px;padding:28px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:box-shadow 0.2s}
+.blog-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+.blog-card h2{margin-bottom:10px}
+.blog-card h2 a{color:#1a73e8;text-decoration:none}
+.blog-card h2 a:hover{text-decoration:underline}
+.blog-meta{color:#888;font-size:14px;margin-bottom:12px}
+.blog-meta span{margin-right:15px}
+.blog-excerpt{color:#555;line-height:1.7}
+.blog-tags{margin-top:12px}
+.tag{display:inline-block;background:#e8f0fe;color:#1a73e8;padding:4px 12px;border-radius:20px;font-size:13px;margin:3px 5px 3px 0}
+
+/* 内页文章样式 */
+.article-content{padding:40px 0}
+.article-content h2{color:#1a73e8;margin:30px 0 15px;font-size:1.5em}
+.article-content h3{color:#333;margin:25px 0 12px;font-size:1.2em}
+.article-content p{color:#444;margin:15px 0;line-height:1.8}
+.article-content ul,.article-content ol{margin:15px 30px;color:#444}
+.article-content li{margin:8px 0;line-height:1.7}
+.article-content pre{background:#1e293b;color:#e2e8f0;padding:18px;border-radius:8px;overflow-x:auto;font-size:14px;margin:15px 0}
+.article-content code{font-family:"Fira Code","Consolas",monospace;font-size:14px}
+.article-content pre code{background:none;padding:0}
+.article-content blockquote{border-left:4px solid #1a73e8;padding:12px 20px;margin:15px 0;background:#f0f6ff;color:#444}
+.article-content img{max-width:100%;border-radius:8px;margin:15px 0}
+.article-content table{width:100%;border-collapse:collapse;margin:15px 0}
+.article-content th,.article-content td{padding:10px;border:1px solid #e0e0e0;text-align:left}
+.article-content th{background:#f0f0f0}
+
+/* CTA */
+.cta-box{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;border-radius:12px;padding:30px;text-align:center;margin:30px 0}
+.cta-box h3{font-size:1.3em;margin-bottom:10px}
+.cta-box p{margin:10px 0;opacity:0.9}
+.btn{display:inline-block;padding:12px 30px;border-radius:8px;text-decoration:none;font-weight:bold;margin:10px 5px}
+.btn-white{background:#fff;color:#1a73e8}
+.btn-outline{background:transparent;border:2px solid #fff;color:#fff}
+
+footer{text-align:center;padding:30px;color:#666;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>📝 Free AI API 博客</h1>
+  <p class="subtitle">DeepSeek AI 免费接口 · 使用教程 · 开发技巧</p>
+</header>
+<nav>
+  <a href="https://jianchuan3.github.io/free-ai-api-deepseek/">🏠 首页</a>
+  <a href="blog.html">📝 博客</a>
+  <a href="https://ai-proxy.free-ai-api.workers.dev/" target="_blank">🚀 API 状态</a>
+  <a href="PREMIUM.html">💎 Premium</a>
+</nav>
+<div class="container">
+
+  <!-- 文章列表由 JS 动态加载 -->
+  <div id="blog-list"></div>
+
+  <div class="cta-box">
+    <h3>🚀 免费使用 DeepSeek AI API</h3>
+    <p>无需注册，每天 50 次免费调用。兼容 OpenAI 格式，直接替换 base_url 即可使用。</p>
+    <a class="btn btn-white" href="https://jianchuan3.github.io/free-ai-api-deepseek/">立即使用 →</a>
+    <a class="btn btn-outline" href="https://ai-proxy.free-ai-api.workers.dev/v1/models" target="_blank">查看模型列表</a>
+  </div>
+</div>
+<footer>
+  <p>Powered by Cloudflare Workers · DeepSeek API · <a href="https://github.com/jianchuan3/free-ai-api-deepseek" style="color:#666">GitHub</a></p>
+</footer>
+
+<script>
+// 文章数据
+const articles = [
+  {
+    id: "free-deepseek-guide",
+    title: "白嫖党的胜利：免费使用 DeepSeek V4 的几种野路子",
+    date: "2026-05-30",
+    tags: ["DeepSeek", "免费API", "教程"],
+    excerpt: "不想花钱又想用上 DeepSeek V4 大模型？这篇文章整理了当前最实用的几种免费获取 DeepSeek API 的方式，包括直接调用 Worker 代理、免费 Key 获取途径和调用限制优化技巧。",
+    url: "articles/free-deepseek-guide.html"
+  }
+];
+
+// 渲染文章列表
+function renderBlog() {
+  const container = document.getElementById('blog-list');
+  if (!container) return;
+  
+  let html = '<h2 style="margin-bottom:24px">📚 所有文章</h2>';
+  
+  articles.forEach(article => {
+    html += `
+      <div class="blog-card">
+        <h2><a href="${article.url}">${article.title}</a></h2>
+        <div class="blog-meta">
+          <span>📅 ${article.date}</span>
+          <span>🏷️ ${article.tags.join(', ')}</span>
+        </div>
+        <div class="blog-excerpt">${article.excerpt}</div>
+        <div class="blog-tags">
+          ${article.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+document.addEventListener('DOMContentLoaded', renderBlog);
+</script>
+</body>
+</html>
