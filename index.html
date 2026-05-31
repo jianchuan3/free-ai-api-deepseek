@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI API - DeepSeek 免费接口 | Cloudflare Workers 全球加速</title>
+<meta name="description" content="免费使用 DeepSeek AI API，无需注册，每日50次免费调用。Powered by Cloudflare Workers 全球加速网络。升级 Premium 可享无限制访问。">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#333;background:#f8f9fa}
+header{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;padding:60px 20px;text-align:center}
+h1{font-size:2.5em;margin-bottom:10px}
+.subtitle{font-size:1.2em;opacity:0.9}
+.container{max-width:900px;margin:0 auto;padding:40px 20px}
+.card{background:#fff;border-radius:12px;padding:30px;margin-bottom:30px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+h2{color:#1a73e8;margin-bottom:20px}
+pre{background:#1e293b;color:#e2e8f0;padding:20px;border-radius:8px;overflow-x:auto;font-size:14px;margin:15px 0}
+code{font-family:"Fira Code","Consolas",monospace}
+.btn{display:inline-block;padding:12px 30px;border-radius:8px;text-decoration:none;font-weight:bold;margin:10px 10px 10px 0}
+.btn-primary{background:#1a73e8;color:#fff}
+.btn-success{background:#0f9d58;color:#fff}
+.btn-warning{background:#f9ab00;color:#333}
+.stats{display:flex;gap:20px;flex-wrap:wrap}
+.stat{flex:1;min-width:150px;background:#fff;border-radius:12px;padding:20px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.stat-value{font-size:2em;font-weight:bold;color:#1a73e8}
+.stat-label{color:#666;margin-top:5px}
+footer{text-align:center;padding:40px;color:#666;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔥 Free AI API</h1>
+  <p class="subtitle">免费 DeepSeek AI 接口 · Cloudflare Workers 全球加速 · 无需注册即用</p>
+</header>
+<div class="container">
+  <div class="stats">
+    <div class="stat"><div class="stat-value">50</div><div class="stat-label">免费请求/天/IP</div></div>
+    <div class="stat"><div class="stat-value">0</div><div class="stat-label">注册门槛</div></div>
+    <div class="stat"><div class="stat-value">BTC</div><div class="stat-label">0.0001 终身Premium</div></div>
+  </div>
+  
+  <div class="card">
+    <h2>🚀 API 端点</h2>
+    <p>使用 Cloudflare Workers 全球加速网络，低延迟访问 DeepSeek 大模型：</p>
+    <pre>https://ai-proxy.free-ai-api.workers.dev/v1/chat/completions</pre>
+    <p>完全兼容 OpenAI 格式，只需修改 base_url：</p>
+    <pre>from openai import OpenAI
+client = OpenAI(
+    base_url="https://ai-proxy.free-ai-api.workers.dev/v1",
+    api_key="not-needed"
+)
+response = client.chat.completions.create(
+    model="deepseek-v4-flash-free",
+    messages=[{"role":"user","content":"你好"}]
+)
+print(response.choices[0].message.content)</pre>
+  </div>
+  
+  <div class="card">
+    <h2>📡 一键测试</h2>
+    <p>终端直接运行：</p>
+    <pre>curl -X POST https://ai-proxy.free-ai-api.workers.dev/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{"model":"deepseek-v4-flash-free","messages":[{"role":"user","content":"Say hello"}]}'</pre>
+    <a class="btn btn-primary" href="https://ai-proxy.free-ai-api.workers.dev/" target="_blank">查看服务状态</a>
+    <a class="btn btn-success" href="https://ai-proxy.free-ai-api.workers.dev/v1/models" target="_blank">查看模型列表</a>
+  </div>
+  
+  <div class="card">
+    <h2>💎 Premium 升级</h2>
+    <p>每天 50 次不够用？升级到 Premium 永久无限制访问：</p>
+    <ul style="margin:15px 20px">
+      <li><strong>价格：</strong>0.0001 BTC（终身）</li>
+      <li><strong>BTC 地址：</strong><code>1PgS158ZM9RqsBfCjatbrLw7HdmgMoJiXL</code></li>
+      <li><strong>权益：</strong>无限制请求、优先带宽、所有模型可用</li>
+    </ul>
+    <p>付款后联系我们获取永久 API Key。</p>
+    <a class="btn btn-warning" href="bitcoin:1PgS158ZM9RqsBfCjatbrLw7HdmgMoJiXL">BTC 付款</a>
+  </div>
+  
+  <div class="card">
+    <h2>📚 可用模型</h2>
+    <table style="width:100%;border-collapse:collapse">
+      <tr style="background:#f0f0f0"><th style="padding:10px;text-align:left">模型 ID</th><th style="padding:10px;text-align:left">说明</th><th style="padding:10px;text-align:left">价格</th></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee">deepseek-v4-flash-free</td><td style="padding:10px;border-bottom:1px solid #eee">DeepSeek V4 Flash（快速版）</td><td style="padding:10px;border-bottom:1px solid #eee">免费</td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee">deepseek-v4-flash</td><td style="padding:10px;border-bottom:1px solid #eee">DeepSeek V4 Flash（快速版，别名）</td><td style="padding:10px;border-bottom:1px solid #eee">免费</td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee">deepseek-chat</td><td style="padding:10px;border-bottom:1px solid #eee">DeepSeek Chat</td><td style="padding:10px;border-bottom:1px solid #eee">免费</td></tr>
+    </table>
+  </div>
+</div>
+<footer>
+  由 Cloudflare Workers 强力驱动 · 问题反馈请提交 GitHub Issue
+</footer>
+</body>
+</html>
