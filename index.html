@@ -74,7 +74,13 @@ print(response.choices[0].message.content)</pre>
       <li><strong>BTC 地址：</strong><code>1PgS158ZM9RqsBfCjatbrLw7HdmgMoJiXL</code></li>
       <li><strong>权益：</strong>无限制请求、优先带宽、所有模型可用</li>
     </ul>
-    <p>付款后联系我们获取永久 API Key。</p>
+    <p><strong>付款后如何获取 Key：</strong></p>
+    <ol style="margin:15px 20px">
+      <li>发送 0.0001 BTC 到上方地址</li>
+      <li>将交易 TXID 发送到 <code>406429544@qq.com</code></li>
+      <li>我们将在 24 小时内回复您的 Premium API Key</li>
+    </ol>
+    <p style="color:#666;font-size:14px">⚡ 自动处理：BTC 网络确认后系统会自动检测并发放 Key</p>
     <a class="btn btn-warning" href="bitcoin:1PgS158ZM9RqsBfCjatbrLw7HdmgMoJiXL">BTC 付款</a>
   </div>
   
@@ -88,6 +94,27 @@ print(response.choices[0].message.content)</pre>
     </table>
   </div>
 </div>
+
+  <div class="card">
+    <h2>🔄 如何运作</h2>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center">
+      <div style="flex:1;min-width:200px;text-align:center;padding:20px">
+        <div style="font-size:3em;color:#1a73e8">1</div>
+        <h3>免费试用</h3>
+        <p style="color:#666">直接调用 API，无需注册。每天 50 次免费额度。</p>
+      </div>
+      <div style="flex:1;min-width:200px;text-align:center;padding:20px">
+        <div style="font-size:3em;color:#f9ab00">2</div>
+        <h3>超过限额</h3>
+        <p style="color:#666">免费额度用完后，API 返回 429 并提示升级 Premium。</p>
+      </div>
+      <div style="flex:1;min-width:200px;text-align:center;padding:20px">
+        <div style="font-size:3em;color:#0f9d58">3</div>
+        <h3>升级 Premium</h3>
+        <p style="color:#666">支付 0.0001 BTC 获取永久 API Key，无限制调用。</p>
+      </div>
+    </div>
+  </div>
 <footer>
   由 Cloudflare Workers 强力驱动 · 问题反馈请提交 GitHub Issue
 </footer>
