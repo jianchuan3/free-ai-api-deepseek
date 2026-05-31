@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从零开始：用DeepSeek API构建一个AI聊天机器人（附Python和curl代码） - Free AI API</title>
+<meta name="description" content="手把手教你用DeepSeek API构建一个能跑起来的AI聊天机器人，附Python和curl代码示例，从命令行到Web界面全覆盖。">
+<meta name="keywords" content="DeepSeek API, AI聊天机器人, Python, 大模型开发, 教程">
+<link rel="canonical" href="https://jianchuan3.github.io/free-ai-api-deepseek/articles/build-ai-chatbot-with-deepseek.html">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#333;background:#f8f9fa}
+nav{background:#fff;border-bottom:1px solid #e0e0e0;padding:12px 0;text-align:center;position:sticky;top:0;z-index:100}
+nav a{color:#1a73e8;text-decoration:none;margin:0 15px;font-size:15px;font-weight:500}
+.article-container{max-width:800px;margin:0 auto;padding:40px 20px}
+.article-header{margin-bottom:30px}
+.article-header h1{font-size:2em;color:#1a73e8;margin-bottom:10px}
+.article-meta{color:#888;font-size:14px;margin-bottom:20px}
+.article-body h2{color:#1a73e8;margin:30px 0 15px;font-size:1.5em}
+.article-body h3{color:#333;margin:25px 0 12px;font-size:1.2em}
+.article-body p{color:#444;margin:15px 0;line-height:1.8}
+.article-body ul,.article-body ol{margin:15px 30px;color:#444}
+.article-body li{margin:8px 0;line-height:1.7}
+.article-body pre{background:#1e293b;color:#e2e8f0;padding:18px;border-radius:8px;overflow-x:auto;font-size:14px;margin:15px 0}
+.article-body code{font-family:"Fira Code","Consolas",monospace;font-size:14px}
+.article-body pre code{background:none;padding:0}
+.article-body blockquote{border-left:4px solid #1a73e8;padding:12px 20px;margin:15px 0;background:#f0f6ff;color:#444}
+.cta-box{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;border-radius:12px;padding:30px;text-align:center;margin:40px 0}
+.cta-box h3{font-size:1.3em;margin-bottom:10px}
+.cta-box p{margin:10px 0;opacity:0.9}
+.btn{display:inline-block;padding:12px 30px;border-radius:8px;text-decoration:none;font-weight:bold;margin:10px 5px}
+.btn-white{background:#fff;color:#1a73e8}
+footer{text-align:center;padding:30px;color:#666;font-size:14px}
+</style>
+</head>
+<body>
+<nav>
+  <a href="https://jianchuan3.github.io/free-ai-api-deepseek/">🏠 首页</a>
+  <a href="https://jianchuan3.github.io/free-ai-api-deepseek/blog.html">📝 博客</a>
+</nav>
+<div class="article-container">
+<div class="article-header">
+  <h1>从零开始：用DeepSeek API构建一个AI聊天机器人（附Python和curl代码）</h1>
+  <div class="article-meta">📅 2026-05-31 · 🏷️ DeepSeek, Python, 教程</div>
+</div>
+<div class="article-body">
+
+
+<p>如果你正在寻找一个强大、便宜（甚至免费）的AI API来构建自己的聊天机器人，DeepSeek绝对值得关注。它不仅在数学、编码等任务上表现出色，而且API定价非常亲民。今天我们就手把手教你用DeepSeek API搭建一个能跑起来的聊天机器人，全程代码可复制。</p>
+
+<h2>为什么选择DeepSeek API？</h2>
+
+<p>在开始写代码之前，先简单说说DeepSeek的优势：</p>
+
+<ul><li><strong>性能强劲</strong>：在多个基准测试中接近GPT-4水平，尤其在中文和编程场景</li>
+<li><strong>价格良心</strong>：输入0.14元/百万token，输出0.28元/百万token（约是GPT-4的1/20）</li>
+<li><strong>上下文长</strong>：支持128K上下文窗口，能处理长篇对话或文档</li>
+<li><strong>开源友好</strong>：模型完全开源，API调用方式兼容OpenAI格式</li>
+</ul>
+<h2>准备工作：获取API密钥</h2>
+
+<p>第一步，你需要一个DeepSeek API密钥。去DeepSeek官网注册账号，在控制台创建API密钥。注意：新用户通常会赠送几百万token的免费额度，足够你测试很久。</p>
+
+<p>拿到密钥后，把它保存到环境变量或配置文件中，<strong>千万不要硬编码在代码里</strong>。</p>
+
+<h2>方法一：用curl快速测试API联通性</h2>
+
+<p>在写任何代码之前，先用curl确认API是否正常工作。打开终端，执行以下命令（替换<code>YOUR_API_KEY</code>）：</p>
+
+<pre><code>curl https://api.deepseek.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "deepseek-chat",
+    "messages": [
+      {"role": "system", "content": "你是一个友好的助手。"},
+      {"role": "user", "content": "你好，请用一句话介绍自己"}
+    ],
+    "stream": false
+  }'
+</code></pre>
+
+如果返回类似这样的JSON，说明API连接成功：
+
+<pre><code>{
+  "id": "chatcmpl-xxx",
+  "object": "chat.completion",
+  "choices": [{
+    "index": 0,
+    "message": {
+      "role": "assistant",
+      "content": "你好！我是DeepSeek，一个由深度求索公司创造的AI助手，很高兴为你服务！"
+    },
+    "finish_reason": "stop"
+  }]
+}
+</code></pre>
+
+<strong>小技巧</strong>：把<code>"stream": true</code>改为<code>true</code>可以实现流式输出，适合需要实时显示文本的场景。
+
+<h2>方法二：用Python构建基础聊天机器人</h2>
+
+<h3>安装依赖</h3>
+
+<pre><code>pip install openai  # DeepSeek API兼容OpenAI SDK
+</code></pre>
+
+<h3>最小可用版本</h3>
+
+下面的代码实现了一个命令行聊天机器人，支持多轮对话：
+
+<pre><code>from openai import OpenAI
+import os
+
+# 初始化客户端（注意base_url要改成DeepSeek的地址）
+client = OpenAI(
+    api_key=os.getenv("DEEPSEEK_API_KEY"),  # 从环境变量读取
+    base_url="https://api.deepseek.com/v1"
+)
+
+def chat_with_deepseek():
+    """简单的命令行对话循环"""
+    messages = [
+        {"role": "system", "content": "你是一个乐于助人的AI助手。请用中文回答。"}
+    ]
+    
+    print("🤖 DeepSeek聊天机器人已启动（输入exit退出）")
+    print("-" * 40)
+    
+    while True:
+        user_input = input("\n👤 你: ")
+        if user_input.lower() in ["exit", "quit"]:
+            print("👋 再见！")
+            break
+        
+        # 添加用户消息
+        messages.append({"role": "user", "content": user_input})
+        
+        try:
+            # 调用API
+            response = client.chat.completions.create(
+                model="deepseek-chat",
+                messages=messages,
+                temperature=0.7,  # 控制创造性（0-2）
+                max_tokens=2048,
+                stream=False
+            )
+            
+            # 获取AI回复
+            ai_reply = response.choices[0].message.content
+            print(f"\n🤖 DeepSeek: {ai_reply}")
+            
+            # 将AI回复加入历史，支持上下文
+            messages.append({"role": "assistant", "content": ai_reply})
+            
+        except Exception as e:
+            print(f"\n❌ 出错了: {str(e)}")
+
+if __name__ == "__main__":
+    chat_with_deepseek()
+</code></pre>
+
+<strong>运行方式</strong>：在终端执行<code>export DEEPSEEK_API_KEY="你的密钥"</code>，然后运行Python脚本。
+
+<h3>进阶：加入流式输出和错误重试</h3>
+
+生产环境建议加入流式输出和重试机制，体验会好很多：
+
+<pre><code>import time
+from openai import OpenAI
+
+def stream_chat(client, messages, retries=3):
+    """流式输出带重试"""
+    for attempt in range(retries):
+        try:
+            response = client.chat.completions.create(
+                model="deepseek-chat",
+                messages=messages,
+                stream=True,  # 开启流式
+                temperature=0.7
+            )
+            
+            full_content = ""
+            print("🤖 DeepSeek: ", end="", flush=True)
+            
+            for chunk in response:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    print(content, end="", flush=True)
+                    full_content += content
+            
+            print()  # 换行
+            return full_content
+            
+        except Exception as e:
+            if attempt < retries - 1:
+                wait_time = 2 ** attempt  # 指数退避
+                print(f"\n⚠️ 请求失败，{wait_time}秒后重试...")
+                time.sleep(wait_time)
+            else:
+                print(f"\n❌ 重试{retries}次后仍失败: {str(e)}")
+                return None
+</code></pre>
+
+<h2>方法三：构建带Web界面的聊天机器人</h2>
+
+命令行太简陋？我们用Flask快速搭建一个网页版：
+
+<pre><code>from flask import Flask, request, jsonify
+from openai import OpenAI
+import os
+
+app = Flask(__name__)
+client = OpenAI(
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com/v1"
+)
+
+# 存储会话（生产环境请用Redis等）
+sessions = {}
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.json
+    session_id = data.get("session_id", "default")
+    user_message = data.get("message", "")
+    
+    # 初始化或获取会话历史
+    if session_id not in sessions:
+        sessions[session_id] = [
+            {"role": "system", "content": "你是一个专业的技术顾问。"}
+        ]
+    
+    sessions[session_id].append({"role": "user", "content": user_message})
+    
+    try:
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=sessions[session_id],
+            temperature=0.7,
+            max_tokens=2048
+        )
+        
+        ai_reply = response.choices[0].message.content
+        sessions[session_id].append({"role": "assistant", "content": ai_reply})
+        
+        return jsonify({"reply": ai_reply, "session_id": session_id})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/reset", methods=["POST"])
+def reset():
+    data = request.json
+    session_id = data.get("session_id", "default")
+    if session_id in sessions:
+        del sessions[session_id]
+    return jsonify({"status": "ok"})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+</code></pre>
+
+前端可以用简单的HTML+JS：
+
+<pre><code><!DOCTYPE html>
+<html>
+<head>
+    <title>DeepSeek Chat</title>
+</head>
+<body>
+    <div id="chat-box"></div>
+    <input id="user-input" placeholder="输入消息...">
+    <button onclick="sendMessage()">发送</button>
+    
+    <script>
+        const sessionId = Date.now().toString();
+        
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value;
+            if (!message) return;
+            
+            // 显示用户消息
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += <code><p><b>你:</b> ${message}</p></code>;
+            input.value = '';
+            
+            // 调用后端API
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({session_id: sessionId, message: message})
+            });
+            
+            const data = await response.json();
+            chatBox.innerHTML += <code><p><b>AI:</b> ${data.reply}</p></code>;
+        }
+    </script>
+</body>
+</html>
+</code></pre>
+
+<h2>常见问题与优化技巧</h2>
+
+<h3>1. 控制Token消耗</h3>
+
+DeepSeek按token计费，建议设置<code>max_tokens</code>限制，避免单次回复过长：
+
+<pre><code>response = client.chat.completions.create(
+    model="deepseek-chat",
+    messages=messages,
+    max_tokens=1024  # 单次回复最多1024个token
+)
+</code></pre>
+
+<h3>2. 系统提示词（System Prompt）的妙用</h3>
+
+通过精心设计system prompt，可以大幅提升回答质量：
+
+<pre><code>system_prompt = """
+你是一个资深Python技术顾问。请遵循以下规则：
+<ul><li>所有代码示例必须包含注释</li>
+<li>优先推荐标准库解决方案</li>
+<li>如果用户问题涉及第三方库，需说明安装方法</li>
+<li>回答末尾可以给出优化建议</li>
+</ul>"""
+</code></pre>
+
+<h3>3. 处理长上下文</h3>
+
+DeepSeek支持128K上下文，但history越长费用越高。可以设置最大历史轮数：
+
+<pre><code>MAX_HISTORY = 20  # 保留最近20轮对话
+
+def trim_history(messages):
+    if len(messages) > MAX_HISTORY + 1:  # +1是system消息
+        # 保留system消息和最近MAX_HISTORY条
+        return [messages[0]] + messages[-(MAX_HISTORY):]
+    return messages
+</code></pre>
+
+<h3>4. 错误处理的最佳实践</h3>
+
+<pre><code>import logging
+from openai import RateLimitError, APITimeoutError
+
+def safe_api_call(client, messages):
+    try:
+        return client.chat.completions.create(...)
+    except RateLimitError:
+        logging.warning("触发速率限制，等待1秒")
+        time.sleep(1)
+        return safe_api_call(client, messages)  # 递归重试
+    except APITimeoutError:
+        logging.error("API超时")
+        return None
+    except Exception as e:
+        logging.critical(f"未知错误: {e}")
+        return None
+</code></pre>
+
+<h2>总结与下一步</h2>
+
+通过以上步骤，你已经掌握了：
+<ul><li>用curl测试DeepSeek API连通性</li>
+<li>用Python构建命令行和Web聊天机器人</li>
+<li>流式输出、错误处理、Token控制等进阶技巧</li>
+</ul>
+DeepSeek API的性价比确实很高，对于个人项目或小团队来说，直接调用官方API完全够用。不过如果你觉得配置环境、管理密钥比较麻烦，或者想快速测试不同模型的效果，也可以考虑使用一些聚合API平台。
+
+<blockquote>💡 <strong>不想自己配置？</strong> 如果你觉得管理API密钥、处理速率限制、维护代码比较麻烦，可以直接使用免费AI API代理 [https://jianchuan3.github.io/free-ai-api-deepseek/](https://jianchuan3.github.io/free-ai-api-deepseek/)，它提供了DeepSeek等模型的免费接入点，无需注册即可快速测试。</blockquote>
+
+最后提醒一句：API密钥请妥善保管，不要提交到公开代码仓库。建议使用环境变量或专门的密钥管理服务。
+
+现在，去构建属于你自己的AI聊天机器人吧！有什么问题欢迎在评论区交流。
+
+<div class="cta-box">
+  <h3>🚀 免费使用 DeepSeek AI API</h3>
+  <p>无需注册，每天 50 次免费调用。兼容 OpenAI 格式，直接替换 base_url 即可。</p>
+  <a class="btn btn-white" href="https://jianchuan3.github.io/free-ai-api-deepseek/">开始使用 →</a>
+</div>
+
+</div>
+</div>
+<footer>
+  <p>Powered by Cloudflare Workers · DeepSeek API · <a href="https://github.com/jianchuan3/free-ai-api-deepseek" style="color:#666">GitHub</a></p>
+</footer>
+</body>
+</html>
