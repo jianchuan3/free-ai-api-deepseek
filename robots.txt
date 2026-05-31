@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jianchuan3.github.io/free-ai-api-deepseek/sitemap.xml
